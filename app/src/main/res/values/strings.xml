@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">CarApplication</string>
+    <string name="start_engine_button">Start engine</string>
+    <string name="stop_engine_button">Stop engine</string>
+</resources>
