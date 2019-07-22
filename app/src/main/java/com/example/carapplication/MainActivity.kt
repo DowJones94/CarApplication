@@ -1,45 +1,51 @@
 package com.example.carapplication
 
 import android.os.Bundle
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity :  AppCompatActivity(), CarTaskCallback{
 
+    private var toast: Toast? = null
+
+    override fun doToast() {
+        if (toast == null) {
+            toast = Toast.makeText(this, "Двигатель уже запущен", Toast.LENGTH_SHORT)
+        }
+        toast!!.show()
+    }
+
+    override fun setCarStateText(stateText: String) {
+        textCarState?.text =stateText
+    }
+
+    override fun setCarTimeLeftText(timeLeftText: String) {
+        textCarTimeLeft?.text =timeLeftText
+    }
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        textCarTimeLeft.text = App.instance.fakeCarTask.i.toString()
-        App.instance.fakeCarTask.setCarTaskCallback(this)
+        App.instance.carTask.setCarTaskCallback(this)
+        textCarState.text = App.instance.carTask.stateText
+        textCarTimeLeft.text = App.instance.carTask.timeLeft
 
-        val carWorkPresenter: ICarWorkPresenter = CarWorkPresenterImpl(textCarState, textCarTimeLeft, this)
+
+        val carWorkPresenter: ICarWorkPresenter = CarWorkPresenterImpl()
         carStartButton.setOnClickListener{carWorkPresenter.engineStart()}
-
-        carStopButton.setOnClickListener{
-            /* carWorkPresenter.engineTurnOff() */
-            App.instance.fakeCarTask.increment()
-        }
+        carStopButton.setOnClickListener{carWorkPresenter.engineTurnOff()}
     }
 
-    override fun doSomething(activityText: String) {
-        textCarTimeLeft.text = activityText
-    }
 }
 
 interface CarTaskCallback{
-    fun doSomething(activityText: String)
-}
 
-class FakeCarTask {
-    private lateinit var carTaskCallback: CarTaskCallback
-    var i: Int = 0
+    fun doToast()
 
-    fun setCarTaskCallback(carTaskCallback: CarTaskCallback){
-        this.carTaskCallback = carTaskCallback
-    }
+    fun setCarStateText(stateText: String)
 
-    fun increment() {
-        carTaskCallback.doSomething("${++i}")
-    }
+    fun setCarTimeLeftText(timeLeftText: String)
 }

@@ -4,7 +4,7 @@ import android.app.Application
 
 class App : Application(){
 
-    val fakeCarTask = FakeCarTask()
+    val carTask = CarTask()
 
     companion object {
         lateinit var instance: App

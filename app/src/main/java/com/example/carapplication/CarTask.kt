@@ -1,13 +1,28 @@
 package com.example.carapplication
 
 import android.os.AsyncTask
-import android.widget.TextView
 
-class CarTask(val textCarState: TextView?, val textCarTimeLeft: TextView?) : AsyncTask<Void, Int, Void>() {
+class CarTask : AsyncTask<Void, Int, Void>() {
+
+    var stateText: String = "Двигатель не запущен"
+        private set
+    var timeLeft: String = "нажмите start"
+        private set
+
+    private lateinit var carTaskCallback: CarTaskCallback
+
+    fun setCarTaskCallback(carTaskCallback: CarTaskCallback){
+        this.carTaskCallback = carTaskCallback
+    }
+
+    fun doToast(){
+        carTaskCallback.doToast()
+    }
 
     override fun onPreExecute() {
         super.onPreExecute()
-        textCarState?.text = "Двигатель запущен"
+        carTaskCallback.setCarStateText("Двигатель запущен")
+        stateText = "Двигатель запущен"
     }
 
     override fun doInBackground(vararg p0: Void?): Void? {
@@ -25,17 +40,22 @@ class CarTask(val textCarState: TextView?, val textCarTimeLeft: TextView?) : Asy
     }
 
     override fun onProgressUpdate(vararg values: Int?) {// fun asd(vararg values: Int?) == fun asd(value: Int, vslue2: Int, )
-        textCarTimeLeft?.text = "Осталось ${values[0]} секунд"
+        carTaskCallback.setCarTimeLeftText("Осталось ${values[0]} секунд")
+        timeLeft = "Осталось ${values[0]} секунд"
     }
 
     override fun onPostExecute(result: Void?) {
-        textCarState?.text = "Двигатель выключен"
-        textCarTimeLeft?.text = "нажмите start"
+        carTaskCallback.setCarStateText("Двигатель выключен")
+        stateText = "Двигатель выключен"
+        carTaskCallback.setCarTimeLeftText("нажмите start")
+        timeLeft = "нажмите start"
     }
 
     override fun onCancelled() {
-        textCarState?.text = "Двигатель выключен"
-        textCarTimeLeft?.text = "нажмите start"
+        carTaskCallback.setCarStateText("Работа прервана")
+        stateText = "Работа прервана"
+        carTaskCallback.setCarTimeLeftText("нажмите start")
+        timeLeft = "нажмите start"
     }
 
 }
