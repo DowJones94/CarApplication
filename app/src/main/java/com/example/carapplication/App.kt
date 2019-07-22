@@ -4,7 +4,7 @@ import android.app.Application
 
 class App : Application(){
 
-    var carTask: CarTask? = null
+//    var carTask: CarTask? = null
     var carWorkPresenterImpl = CarWorkPresenterImpl()
 
     companion object {

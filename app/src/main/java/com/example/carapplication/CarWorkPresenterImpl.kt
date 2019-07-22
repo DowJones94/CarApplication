@@ -5,25 +5,27 @@ import android.os.AsyncTask
 
 class CarWorkPresenterImpl : ICarWorkPresenter {
 
+    private var carTask: CarTask? = null
     private lateinit var carCallback: CarTaskCallback
 
     fun setTaskCallback(carCallback: CarTaskCallback){
         this.carCallback = carCallback
+        carTask?.setCarTaskCallback(carCallback)
     }
 
 
     override fun engineStart() {
         //если задача не запускалась или была отменена или была завершена
-        if (App.instance.carTask == null || App.instance.carTask!!.status == AsyncTask.Status.FINISHED || App.instance.carTask!!.isCancelled) {
-            App.instance.carTask = CarTask()
-            App.instance.carTask?.setCarTaskCallback(carCallback)
-            App.instance.carTask!!.execute()
+        if (carTask == null || carTask!!.status == AsyncTask.Status.FINISHED || carTask!!.isCancelled) {
+            carTask = CarTask()
+            carTask?.setCarTaskCallback(carCallback)
+            carTask!!.execute()
         } else {
-            App.instance.carTask?.doToast()
+            carCallback.doToast()
         }
     }
 
     override fun engineTurnOff() {
-        App.instance.carTask?.cancel(false)
+        carTask?.cancel(false)
     }
 }
