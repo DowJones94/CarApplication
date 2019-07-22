@@ -1,7 +1,6 @@
 package com.example.carapplication
 
 import android.os.Bundle
-import android.os.PersistableBundle
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import kotlinx.android.synthetic.main.activity_main.*
@@ -31,8 +30,6 @@ class MainActivity :  AppCompatActivity(), CarTaskCallback{
         setContentView(R.layout.activity_main)
 
         App.instance.carWorkPresenterImpl.setTaskCallback(this)
-
-
 
         carStartButton.setOnClickListener{App.instance.carWorkPresenterImpl.engineStart()}
         carStopButton.setOnClickListener{App.instance.carWorkPresenterImpl.engineTurnOff()}
