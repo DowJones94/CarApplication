@@ -29,14 +29,14 @@ class MainActivity :  AppCompatActivity(), CarTaskCallback{
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        App.instance.carTask.setCarTaskCallback(this)
-        textCarState.text = App.instance.carTask.stateText
-        textCarTimeLeft.text = App.instance.carTask.timeLeft
+        App.instance.carWorkPresenterImpl.setTaskCallback(this)
+
+//        textCarState.text = App.instance.carTask?.stateText
+//        textCarTimeLeft.text = App.instance.carTask?.timeLeft
 
 
-        val carWorkPresenter: ICarWorkPresenter = CarWorkPresenterImpl()
-        carStartButton.setOnClickListener{carWorkPresenter.engineStart()}
-        carStopButton.setOnClickListener{carWorkPresenter.engineTurnOff()}
+        carStartButton.setOnClickListener{App.instance.carWorkPresenterImpl.engineStart()}
+        carStopButton.setOnClickListener{App.instance.carWorkPresenterImpl.engineTurnOff()}
     }
 
 }
